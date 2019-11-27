@@ -1,0 +1,28 @@
+
+			.text
+			.global audio
+			.equ Space, 0xFF203044 
+			.equ Left, 0xFF203048
+			.equ Right, 0xFF20304C
+
+audio:
+			LDR R2,=Space
+			LDR R1,[R2]			
+			AND R4,R1,#0xFF000000
+			AND R5,R1,#0x00FF0000
+			LSR R4,R4,#6			//SHIFHT TO GET THE REAL VALUES
+			LSR R5,R5,#4			//SHIFT TO GET THE REAL VALUES
+			CMP R4, #1				//CHECK IF THERE IS SPACE
+			BLT EXIT				//EXIT
+			CMP R5, #1				//CHECK IF THERE IS SPACE
+			BLT EXIT				//RETURN FALSE AND EXIT
+			LDR R3, =Left		//STORE THE POINTER TO LEFT ANF RIGHT
+			LDR R2, =Right		
+			STR R0,[R3]				//STORE R0 IN RIGHT
+			STR R0,[R2]				//STORE R0 IN LEFT
+			MOV R0, #1				//RETURN TRUE AND EXIT
+			BX LR			
+EXIT:		
+			MOV R0, #0				//RETURN 0 IN R0 AND EXIT
+			BX LR
+			.end
